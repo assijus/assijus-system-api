@@ -57,8 +57,12 @@ paths:
                 type: string
                 format: byte
                 description: PDF codificado em base64
+              secret:
+                type: string
+                description: Segredo associado ao documento que será validado para permitir a visualização
             example:
               doc: 24yd3pPUpPz4dyVdRQAP+zI7R8wTsNX9J7El/a5Bb64=
+              secret: 05d50c47-0ed5-4fb0-80c7-ea65d37d27a0
         500:
           description: Error ocurred
           schema:
@@ -91,6 +95,9 @@ paths:
               doc:
                 type: string
                 format: byte
+              secret:
+                type: string
+                description: Segredo associado ao documento que será validado para permitir o envio do conteúdo do PDF para ser assinado em PKCS7
             example:      
               sha1: csTZGGSt1AG1m3T5VaIzcHX8Av0=
               sha256: 24yd3pPUpPz4dyVdRQAP+zI7R8wTsNX9J7El/a5Bb64=
@@ -128,11 +135,75 @@ paths:
           schema:
             $ref: "#/definitions/Error"
             
+  /doc/{id}/info:
+    get:
+      description: Obtem as assinaturas e as movimentações do documento
+      tags: [sign]
+      parameters:
+        - $ref: "#/parameters/id"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              signature:
+                type: array
+                items:
+                  $ref: "#/definitions/Signature"
+              movement:
+                type: array
+                items:
+                  $ref: "#/definitions/Movement"
+              secret:
+                type: string
+                description: Segredo associado ao documento que será validado para permitir a visualização
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
+            
+  /sign/{ref}:
+    get:
+      description: Obter uma assinatura de um documento
+      tags: [sign]
+      parameters:
+        - $ref: "#/parameters/ref"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              envelope:
+                type: string
+                format: byte
+                description: Envelope da assinatura codificado em base64
+              time:
+                type: string
+                format: date-time
+                description: Data e hora da assinatura
+            example:
+              envelope: 24yd3pPUpPz4dyVdRQAP+zI7R8wTsNX9J7El/a5Bb64=
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+            
 parameters:
   id:
     name: id
     in: path
     description: Identificador do documento
+    required: true
+    type: string
+  ref:
+    name: ref
+    in: path
+    description: Identificador da assinatura
     required: true
     type: string
   cpf:
@@ -186,6 +257,9 @@ definitions:
       id:
         type: string
         description: identificador do documento
+      secret:
+        type: string
+        description: segredo associado ao documento, se não for informado, qualquer pessoa poderá visualizar seu PDF. Deve ser usada uma senha bem grande, de preferência, um GUID ou um SHA256.
       code: 
         type: string
       descr: 
@@ -203,6 +277,27 @@ definitions:
       kind: Decisão
       origin: TextoWeb
       extra: 1
+
+  Signature:
+    type: object
+    properties:
+      ref:
+        type: string
+      signer:
+        type: string
+      kind:
+        type: string
+
+  Movement:
+    type: object
+    properties:
+      time:
+        type: string
+        format: date-time
+      department:
+        type: string
+      kind:
+        type: string
 
   Warning:
     type: object
