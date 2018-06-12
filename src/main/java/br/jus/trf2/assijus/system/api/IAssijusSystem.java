@@ -1,12 +1,15 @@
 package br.jus.trf2.assijus.system.api;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.crivano.swaggerservlet.ISwaggerMethod;
 import com.crivano.swaggerservlet.ISwaggerModel;
 import com.crivano.swaggerservlet.ISwaggerRequest;
 import com.crivano.swaggerservlet.ISwaggerResponse;
+import com.crivano.swaggerservlet.ISwaggerResponseFile;
 
 public interface IAssijusSystem {
 	public class Document implements ISwaggerModel {
@@ -58,9 +61,52 @@ public interface IAssijusSystem {
 		public String cpf;
 	}
 
-	public class DocIdPdfGetResponse implements ISwaggerResponse {
-		public byte[] doc;
-		public String secret;
+	public class DocIdPdfGetResponse implements ISwaggerResponse, ISwaggerResponseFile {
+		public String contenttype = "application/pdf";
+		public String contentdisposition = "attachment";
+		public Long contentlength;
+		public InputStream inputstream;
+		public Map<String, List<String>> headerFields;
+
+		public String getContenttype() {
+			return contenttype;
+		}
+
+		public void setContenttype(String contenttype) {
+			this.contenttype = contenttype;
+		}
+
+		public String getContentdisposition() {
+			return contentdisposition;
+		}
+
+		public void setContentdisposition(String contentdisposition) {
+			this.contentdisposition = contentdisposition;
+		}
+
+		public Long getContentlength() {
+			return contentlength;
+		}
+
+		public void setContentlength(Long contentlength) {
+			this.contentlength = contentlength;
+		}
+
+		public InputStream getInputstream() {
+			return inputstream;
+		}
+
+		public void setInputstream(InputStream inputstream) {
+			this.inputstream = inputstream;
+		}
+
+		public Map<String, List<String>> getHeaderFields() {
+			return headerFields;
+		}
+
+		public void setHeaderFields(Map<String, List<String>> headerFields) {
+			this.headerFields = headerFields;
+		}
 	}
 
 	public interface IDocIdPdfGet extends ISwaggerMethod {

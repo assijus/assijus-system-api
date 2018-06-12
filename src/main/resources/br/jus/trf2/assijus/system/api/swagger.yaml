@@ -51,18 +51,17 @@ paths:
         200:
           description: Successful response
           schema:
-            type: object
-            properties:
-              doc:
-                type: string
-                format: byte
-                description: PDF codificado em base64
-              secret:
-                type: string
-                description: Segredo associado ao documento que será validado para permitir a visualização
-            example:
-              doc: 24yd3pPUpPz4dyVdRQAP+zI7R8wTsNX9J7El/a5Bb64=
-              secret: 05d50c47-0ed5-4fb0-80c7-ea65d37d27a0
+            type: file
+          headers:
+            Content-Type:
+              type: string
+              description: application/pdf
+            Content-Disposition:
+              type: string
+              description: attachment
+            Doc-Secret:
+              type: string
+              description: Segredo associado ao documento que será validado para permitir a visualização, geralmente é usado um GUID
         500:
           description: Error ocurred
           schema:
@@ -220,32 +219,37 @@ parameters:
     type: string
   sha1:
     name: sha1
+    in: query
     required: false
     type: string
     format: byte
   sha256:
     name: sha256
+    in: query
     required: false
     type: string
     format: byte
   name:
     name: name
+    in: query
     required: false
     type: string
   time:
     name: time
+    in: query
     required: false
     type: string
     format: date-time
   envelope:
     name: envelope
-    in: formData
+    in: query
     description: Envelope CMS/PKCS7 codificado em base64
     required: true
     type: string
     format: byte
   extra:
     name: extra
+    in: query
     required: false
     type: string
 
