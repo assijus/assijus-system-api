@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.jus.trf2.assijus</groupId>
 	<artifactId>assijus-system-api</artifactId>
-	<version>1.1.0</version>
+	<version>1.1.1</version>
 	
 	<name>assijus-system-api java library</name>
 	<description>assijus-system-api - MIT Java library</description>
@@ -108,7 +108,7 @@
 		<dependency>
 			<groupId>com.crivano</groupId>
 			<artifactId>swaggerservlet</artifactId>
-			<version>1.20.0</version>
+			<version>1.21.0</version>
 		</dependency>
 	</dependencies>
 </project>
